@@ -50,7 +50,7 @@ def configure_source(server: str, earliest: bool = False) -> KafkaSource:
 
     kafka_source = (
         KafkaSource.builder()
-        .set_topics("tick-test")
+        .set_topics("tick-data")
         .set_properties(properties)
         .set_starting_offsets(offset)
         .set_value_only_deserializer(SimpleStringSchema())
@@ -98,7 +98,7 @@ def main2() -> None:
             WATERMARK FOR trading_date_time AS trading_date_time - INTERVAL 5 MINUTE
         ) WITH (
             'connector' = 'kafka',
-            'topic' = 'tick-test',
+            'topic' = 'tick-data',
             'properties.bootstrap.servers' = 'kafka:29092',
             'format' = 'json',
             'scan.startup.mode' = 'earliest-offset',

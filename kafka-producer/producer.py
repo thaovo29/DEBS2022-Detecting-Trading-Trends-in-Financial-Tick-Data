@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 # Config from env (with defaults)
 KAFKA_SERVER = os.getenv("KAFKA_SERVER", "kafka")
 KAFKA_PORT = os.getenv("KAFKA_PORT", "29092")
-KAFKA_TOPIC = os.getenv("KAFKA_TOPIC_NAME", "tick-test")
+KAFKA_TOPIC = os.getenv("KAFKA_TOPIC_NAME", "tick-data")
 
 BOOTSTRAP_SERVERS = [f"{KAFKA_SERVER}:{KAFKA_PORT}"]
 
@@ -54,7 +54,7 @@ def wait_for_broker(timeout=60):
             time.sleep(2)
 
 def readDataFromDataSet(): 
-    days = ['15'] # '08', '09', '10', '11', '12', '13', '14' 
+    days = ['08', '09', '10', '11', '12', '13', '14'] # '08', '09', '10', '11', '12', '13', '14' 
     cols = ["ID", "SecType", "Last", "Trading time"]
     for day in days:
         dd = f'{day}-11-21'
