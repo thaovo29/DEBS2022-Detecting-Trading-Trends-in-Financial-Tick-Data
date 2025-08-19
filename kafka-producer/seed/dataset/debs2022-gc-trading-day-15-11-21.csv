@@ -1,0 +1,14 @@
+ID,SecType,Date,Time,Ask,Ask volume,Bid,Bid volume,Ask time,Day's high ask,Close,Currency,Day's high ask time,Day's high,ISIN,Auction price,Day's low ask,Day's low,Day's low ask time,Open,Nominal value,Last,Last volume,Trading time,Total volume,Mid price,Trading date,Profit,Current price,Related indices,Day high bid time, Day low bid time,Open Time, Last trade time, Close Time, Day high Time, Day low Time,Bid time,Auction Time
+#'Unique ID','Security Type (E)quity/(I)ndex', 'System date for last received update','System time for last received update','Price of best ask order','Volume of best ask order','Price of best bid order','Volume of best bid order','Time of last ask','Day's high ask','Closing price','Currency (according to ISO 4217)','Day's high ask time','Day's high','ISIN (International Securities Identification Number)','Price at midday's auction','Lowest ask price of the current day','Lowest price of the current day','Time of lowest ask price of the current day','First price of current trading day','Nominal Value','Last trade price','Last trade volume','Time of last update (bid/ask/trade) ','Cumulative volume for current trading day','Mid price (between bid and ask)','Date of last trade','Profit','Current price','Related indices','Days high bid time', 'Days low bid time','Time of open price', 'Time of last trade', 'Time of closing price', 'Time of days high', 'Time of days low',Time of last bid update,Time when last auction price was made
+A0HN5C.ETR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,11.2,,00:00:00.00,,,15/11/2022,,,,,,,,,,,,,
+A0HN5C.ETR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,11.2,,07:15:33.45,,,15/11/2022,,,,,,,,,,,,,
+A0HN5C.ETR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,13.2,,07:45:34.30,,,15/11/2022,,,,,,,,,,,,,
+SGFI.FR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,24.2,,08:15:34.45,,,15/11/2022,,,,,,,,,,,,,
+A0HN5C.ETR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,14.2,,08:45:35.45,,,15/11/2022,,,,,,,,,,,,,
+SGFI.FR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,39,,08:55:35.50,,,15/11/2022,,,,,,,,,,,,,
+SGFI.FR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,25.2,,09:15:36.20,,,15/11/2022,,,,,,,,,,,,,
+A0HN5C.ETR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,26.2,,09:15:37.50,,,15/11/2022,,,,,,,,,,,,,
+SGFI.FR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,21.3,,09:15:40.50,,,15/11/2022,,,,,,,,,,,,,
+A0HN5C.ETR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,19.2,,09:15:41.50,,,15/11/2022,,,,,,,,,,,,,
+SGFI.FR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,-86,,09:15:42.50,,,15/11/2022,,,,,,,,,,,,,
+SGFI.FR,E,14-11-2021,01:01:11.150,,,,,,,,,,,,,,,,,,20.2,,09:45:42.50,,,15/11/2022,,,,,,,,,,,,,

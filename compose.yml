@@ -1,0 +1,150 @@
+version: "3.9"
+
+networks:
+  bridge:
+    driver: bridge
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    container_name: zookeeper
+    networks:
+      - bridge
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:6.2.0
+    container_name: kafka
+    networks:
+      - bridge
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      # - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  kafka-producer:
+    container_name: kafka-producer
+    build:
+      context: ./kafka-producer
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      KAFKA_SERVER: "kafka"
+      KAFKA_PORT: "29092"
+      ZOOKEEPER_SERVER: "zookeeper:2181"
+      PRODUCER_INTERVAL: 100
+    ports:
+      - 8000:8000
+    networks:
+      - bridge
+    volumes:
+      - tickdata:/data
+
+  flink-jobmanager:
+    build:
+      context: ./flink-processor
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+    command: jobmanager
+    depends_on:
+      - zookeeper
+      - kafka
+    networks:
+      - bridge
+
+  flink-taskmanager:
+    build:
+      context: ./flink-processor
+      dockerfile: Dockerfile
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 4
+    networks:
+      - bridge
+
+  timescaledb:
+    image: timescale/timescaledb:2.12.1-pg14 # Or choose a specific version like pg17-latest
+    container_name: timescaledb
+    ports:
+      - "5432:5432"
+    env_file:
+      - project.env
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - bridge
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username -d database"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  db-migrator:
+    image: postgres:14-alpine
+    container_name: db-migrator
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    env_file:
+      - project.env
+    volumes:
+      - ./db:/migrations:ro
+    command: ["/migrations/migrate.sh"]
+    networks:
+      - bridge
+    restart: "no"
+
+  streamlit:
+    build: ./streamlit_app
+    container_name: streamlit_app
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      db-migrator:
+        condition: service_completed_successfully
+    env_file:
+      - project.env
+    ports:
+      - "8501:8501"
+    networks:
+      - bridge
+    volumes:
+      - ./streamlit_app:/app
+    command: ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
+volumes:
+  timescaledb_data:
+  tickdata:
