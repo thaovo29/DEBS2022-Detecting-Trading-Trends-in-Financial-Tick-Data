@@ -2,6 +2,7 @@
 old.yml
 test.py
 /dataset
+/kafka-producer/seed/dataset/
 /.venv
 .env
 
