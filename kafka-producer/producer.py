@@ -53,8 +53,8 @@ def wait_for_broker(timeout=60):
             print(f"Waiting for Kafka... ({elapsed}s elapsed)")
             time.sleep(2)
 
-def readDataFromDataSet(): # '08', '09', '10', '11', '12', '13', '14' 
-    days = ['08']
+def readDataFromDataSet(): 
+    days = ['15'] # '08', '09', '10', '11', '12', '13', '14' 
     cols = ["ID", "SecType", "Last", "Trading time"]
     for day in days:
         dd = f'{day}-11-21'
